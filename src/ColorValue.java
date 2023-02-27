@@ -1,7 +1,7 @@
 public class ColorValue {
 
     // we will store this as a button value
-    private char value;
+    private final char value;
 
     public ColorValue (char sym) {
         if (!(sym == '^' || (sym >= 'a' && sym <= 'z') || (sym >= 'A' && sym <= 'Z'))) {

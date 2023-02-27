@@ -3,7 +3,7 @@
  */
 
 public class Tile {
-    private char symbol;
+    private final char symbol;
 
     public Tile(char sym, int numColors) {
 
@@ -16,15 +16,16 @@ public class Tile {
                 System.exit(1);
             }
 
-            if ((sym >= 'A' && sym <= 'Z') && (sym >= ('A' + numColors + 1))) {
+            if ((sym >= 'A' && sym <= 'Z') && (sym >= ('A' + numColors))) {
                 System.err.println("Invalid door in map");
                 System.exit(1);
             }
 
-            if ((sym >= 'a' && sym <= 'z') && (sym >= ('a' + numColors + 1))) {
+            if ((sym >= 'a' && sym <= 'z') && (sym >= ('a' + numColors))) {
                 System.err.println("Invalid button in map");
                 System.exit(1);
             }
+
         symbol = sym;
     }
 
@@ -37,6 +38,28 @@ public class Tile {
             return '.';
 
         return symbol;
+    }
+
+    public boolean isButton(ColorValue v) {
+        if ((symbol >= 'a' && symbol <= 'z') || symbol == '^') {
+            if (symbol == v.asButton())
+                return false;
+
+            return true;
+        }
+        else
+            return false;
+
+    }
+
+    public boolean isDoor(ColorValue v) {
+        if ((symbol >= 'A' && symbol <= 'Z')) {
+            if (symbol == v.asDoor())
+                return false;
+            return true;
+        }
+        else
+            return false;
 
     }
 

@@ -15,7 +15,7 @@ public class Config {
     private boolean checkpoint2 = false;
 
     // GetOpt options
-    private static LongOpt[] longOptions = {
+    private static final LongOpt[] longOptions = {
             new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'),
             new LongOpt("stack", LongOpt.NO_ARGUMENT, null, 's'),
             new LongOpt("queue", LongOpt.NO_ARGUMENT, null, 'q'),
@@ -75,7 +75,7 @@ public class Config {
                     break;
                 default:
                     // none of the above
-                    System.err.println("Unknown command line option -" + (char) choice);;
+                    System.err.println("Unknown command line option -" + (char) choice);
                     System.exit(1);
             } // switch()
 
@@ -92,6 +92,10 @@ public class Config {
 
     public boolean isQueueMode() {
         return mode == 'q';
+    }
+
+    public boolean isStackMode() {
+        return mode == 's';
     }
 
     public boolean isMapOutputMode() {
