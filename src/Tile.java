@@ -42,10 +42,7 @@ public class Tile {
 
     public boolean isButton(ColorValue v) {
         if ((symbol >= 'a' && symbol <= 'z') || symbol == '^') {
-            if (symbol == v.asButton())
-                return false;
-
-            return true;
+            return symbol != v.asButton();
         }
         else
             return false;
@@ -54,9 +51,7 @@ public class Tile {
 
     public boolean isDoor(ColorValue v) {
         if ((symbol >= 'A' && symbol <= 'Z')) {
-            if (symbol == v.asDoor())
-                return false;
-            return true;
+            return symbol != v.asDoor();
         }
         else
             return false;

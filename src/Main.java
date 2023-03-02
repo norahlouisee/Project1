@@ -12,9 +12,13 @@ public class Main {
         if (c.isCheckpoint1()) {
             puzzle.printMap();
         }
-        else {
+        else if (c.isCheckpoint2()) {
             puzzle.search(c);
+        } else {
+            puzzle.search(c);
+            puzzle.printSolution(c);
         }
+
 
 
     }

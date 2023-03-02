@@ -1,5 +1,3 @@
-import java.util.HashMap;
-
 public class State {
 
     private final ColorValue c;
@@ -14,8 +12,8 @@ public class State {
 
     public Point getPoint() { return p; }
 
-    public void printState() {
-        System.out.printf("(%s, (%d, %d))\n", getColorValue().toString(), getPoint().getRow(), getPoint().getCol());
+    public String printState() {
+        return "(" + getColorValue().toString() + ", (" + getPoint().getRow() + ", " + getPoint().getCol() + "))\n";
     }
 
     @Override

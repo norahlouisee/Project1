@@ -1,8 +1,10 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Maze {
+
     // store dimensions
     private final int width;
     private final int height;
@@ -16,12 +18,23 @@ public class Maze {
     // 3D ArrayList to store whether we reach a tile in a given order
 
     // color -- row -- col
-    private ArrayList<ArrayList<ArrayList<Boolean>>> reached;
+    private ArrayList<ArrayList<ArrayList<Character>>> reached;
 
     // reachable collection
     private ArrayDeque<State> reachableCollection;
 
     private State start, finish;
+
+    private StringBuilder output;
+
+    private static final char FROM_START = '@';
+    private static final char FINISH = '?';
+    private static final char NOT_REACHED = '#';
+    private static final char GO_NORTH = 'N';
+    private static final char GO_EAST = 'E';
+    private static final char GO_SOUTH = 'S';
+    private static final char GO_WEST = 'W';
+
 
     public Maze(Scanner in) {
         // get info from scanner
@@ -72,12 +85,15 @@ public class Maze {
             // loop through chars in line and add to row of tiles
             for (int i = 0; i < line.length(); i++) {
                 char sym = line.charAt(i);
+
+                // add state as start
                 if (sym == '@') {
                     start = new State(ColorValue.fromIndex(0), new Point(i, row));
                     // error checking for one state
                     countStart++;
                 }
 
+                // add state as finush
                 if (sym == '?') {
                     finish = new State(ColorValue.fromIndex(0), new Point(i, row));
                     countEnd++;
@@ -108,17 +124,20 @@ public class Maze {
     }
 
     public void search(Config c) {
+
+        output = new StringBuilder();
+
         // fill in our reached AL with false
         reached = new ArrayList<>(numColors + 1);
 
         for (int color = 0; color < numColors + 1; color++) {
             // make an array list to store rows for this color
-            ArrayList<ArrayList<Boolean>> rowList = new ArrayList<>(height);
+            ArrayList<ArrayList<Character>> rowList = new ArrayList<>(height);
             for (int row = 0; row < height; row++) {
                 // array list for column values
-                ArrayList<Boolean> colList = new ArrayList<>(width);
+                ArrayList<Character> colList = new ArrayList<>(width);
                 for (int col = 0; col < width; col++) {
-                    colList.add(false);
+                    colList.add(NOT_REACHED);
                 } // col for()
                 rowList.add(colList);
             } // row for()
@@ -129,13 +148,13 @@ public class Maze {
         reachableCollection = new ArrayDeque<>();
 
         // step 2
-        markReached(start);
+        markReached(start, FROM_START);
         reachableCollection.addFirst(start);
 
         State curr = start;
         if (c.isCheckpoint2()) {
-            System.out.print("  adding ");
-            curr.printState();
+            output.append("  adding ");
+            output.append(curr.printState());
         }
 
         int count = 1;
@@ -143,182 +162,263 @@ public class Maze {
         // step 3
         while (!reachableCollection.isEmpty()) {
 
-            if (c.isQueueMode()) {
-                curr = reachableCollection.removeFirst();
+            curr = reachableCollection.removeFirst();
 
-                if (c.isCheckpoint2()) {
-                    System.out.printf("%d: processing ", count++);
-                    curr.printState();
-                }
+            if (c.isCheckpoint2()) {
+                output.append(count++);
+                output.append(": processing ");
+                output.append(curr.printState());
+            }
 
-                // if current tile is a button and hasn't been visited
+            // if current tile is a button and hasn't been visited
                 /*
                 if S = (c, (row, col)) is the location of a button b of a different color than c or is a
                 trap, and b has not yet reachable, add (b, (row, col)) to the
                 <reachable_collection> and mark it as reachable.
                  */
 
-                Tile checkButton = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
+            Tile checkButton = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
 
-                // if
-                if (checkButton.isButton(curr.getColorValue())) {
-                        if (!canBeReached(curr) ) {
-                            State button = new State(new ColorValue(checkButton.getSymbol()), curr.getPoint());
-                            // System.out.println("Current color value: " + curr.getColorValue());
-                            markReached(button);
-                            reachableCollection.addLast(button);
-                            if (c.isCheckpoint2()) {
-                                System.out.print("  adding ");
-                                button.printState();
-                            }
-                            if (checkFinish(button))
-                                break;
-                        }
-                } else {
-                    // check north
-                    State north = new State(curr.getColorValue(), curr.getPoint().north());
-                    if (canBeReached(north)) {
-                        markReached(north);
-                        reachableCollection.addLast(north);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            north.printState();
-                        }
-                        if (checkFinish(north))
-                            break;
-                    }
+            // if
+            if (checkButton.isButton(curr.getColorValue())) {
+                State button = new State(new ColorValue(checkButton.getSymbol()), curr.getPoint());
+                if (canBeReached(button)) {
+                    // System.out.println("Current color value: " + curr.getColorValue());
+                    markReached(button, curr.getColorValue().asButton());
 
-                    // check east
-                    State east = new State(curr.getColorValue(), curr.getPoint().east());
-                    if (canBeReached(east)) {
-                        markReached(east);
-                        reachableCollection.addLast(east);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            east.printState();
-                        }
-                        if (checkFinish(east))
-                            break;
-                    }
+                    if (c.isQueueMode())
+                        reachableCollection.addLast(button);
+                    if (c.isStackMode())
+                        reachableCollection.addFirst(button);
 
-                    // check south
-                    State south = new State(curr.getColorValue(), curr.getPoint().south());
-                    if (canBeReached(south)) {
-                        markReached(south);
-                        reachableCollection.addLast(south);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            south.printState();
-                        }
-                        if (checkFinish(south))
-                            break;
-                    }
-
-                    // check west
-                    State west = new State(curr.getColorValue(), curr.getPoint().west());
-                    if (canBeReached(west)) {
-                        markReached(west);
-                        reachableCollection.addLast(west);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            west.printState();
-                        }
-                        if (checkFinish(west))
-                            break;
-                    }
-
-                    if (count > numColors * width * height){
-                        System.err.println("Too many states");
-                        System.exit(1);
-                    }
-                }
-            }
-
-
-            if (c.isStackMode()) {
-                curr = reachableCollection.removeFirst();
-
-                if (curr.getPoint().getRow() == finish.getPoint().getRow() && curr.getPoint().getCol() == finish.getPoint().getCol())
-                    break;
-
-                if (c.isCheckpoint2()) {
-                    System.out.printf("%d: processing ", count++);
-                    curr.printState();
-                }
-
-                Tile checkButton = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
-
-                if (checkButton.isButton(curr.getColorValue()) && !canBeReached(curr)) {
-                    State button = new State(new ColorValue(checkButton.getSymbol()), curr.getPoint());
-                    markReached(button);
-                    reachableCollection.addFirst(button);
                     if (c.isCheckpoint2()) {
-                        System.out.print("  adding ");
-                        button.printState();
+                        output.append("  adding ");
+                        output.append(button.printState());
                     }
-                    if (checkFinish(button))
-                        break;
+                }
+            } else {
+                // check north
+                State north = new State(curr.getColorValue(), curr.getPoint().north());
+                if (canBeReached(north)) {
+                    markReached(north, GO_NORTH);
 
-                } else {
-                    // check north
-                    State north = new State(curr.getColorValue(), curr.getPoint().north());
-                    if (canBeReached(north)) {
-                        markReached(north);
+                    if (c.isQueueMode())
+                        reachableCollection.addLast(north);
+                    if (c.isStackMode())
                         reachableCollection.addFirst(north);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            north.printState();
-                        }
-                        if (checkFinish(north))
-                            break;
-                    }
 
-                    // check east
-                    State east = new State(curr.getColorValue(), curr.getPoint().east());
-                    if (canBeReached(east)) {
-                        markReached(east);
+                    if (c.isCheckpoint2()) {
+                        output.append("  adding ");
+                        output.append(north.printState());
+                    }
+                }
+
+                // check east
+                State east = new State(curr.getColorValue(), curr.getPoint().east());
+                if (canBeReached(east)) {
+                    markReached(east, GO_EAST);
+
+                    if (c.isQueueMode())
+                        reachableCollection.addLast(east);
+                    if (c.isStackMode())
                         reachableCollection.addFirst(east);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            east.printState();
-                        }
-                        if (checkFinish(east))
-                            break;
-                    }
 
-                    // check south
-                    State south = new State(curr.getColorValue(), curr.getPoint().south());
-                    if (canBeReached(south)) {
-                        markReached(south);
+                    if (c.isCheckpoint2()) {
+                        output.append("  adding ");
+                        output.append(east.printState());
+                    }
+                }
+
+                // check south
+                State south = new State(curr.getColorValue(), curr.getPoint().south());
+                if (canBeReached(south)) {
+                    markReached(south, GO_SOUTH);
+
+                    if (c.isQueueMode())
+                        reachableCollection.addLast(south);
+                    if (c.isStackMode())
                         reachableCollection.addFirst(south);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            south.printState();
-                        }
-                        if (checkFinish(south))
-                            break;
-                    }
 
-                    // check west
-                    State west = new State(curr.getColorValue(), curr.getPoint().west());
-                    if (canBeReached(west)) {
-                        markReached(west);
+                    if (c.isCheckpoint2()) {
+                        output.append("  adding ");
+                        output.append(south.printState());
+                    }
+                }
+
+                // check west
+                State west = new State(curr.getColorValue(), curr.getPoint().west());
+                if (canBeReached(west)) {
+                    markReached(west, GO_WEST);
+
+                    if (c.isQueueMode())
+                        reachableCollection.addLast(west);
+                    if (c.isStackMode())
                         reachableCollection.addFirst(west);
-                        if (c.isCheckpoint2()) {
-                            System.out.print("  adding ");
-                            west.printState();
-                        }
-                        if (checkFinish(west))
-                            break;
-                    }
 
-                    if (count > (numColors * width * height)){
-                        System.err.println("Too many states");
-                        System.exit(1);
+                    if (c.isCheckpoint2()) {
+                        output.append("  adding ");
+                        output.append(west.printState());
                     }
+                }
+
+                if (checkFinish(north) || checkFinish(east) || checkFinish(south) || checkFinish(west)) {
+                    if (c.isCheckpoint2())
+                        break;
                 }
             }
         }
+        if (c.isCheckpoint2())
+            System.out.print(output);
+    }
+
+    public void printSolution(Config c) {
+        List<State> backtrack = backtrack();
+
+        StringBuilder list = new StringBuilder();
+
+        // output with the correct version
+        if (c.isMapOutputMode()) {
+            printMap(backtrack);
+        }
+        else {
+            // print the list
+            for (State s : backtrack) {
+                list.insert(0, s.printState());
+            }
+            System.out.print(list);
+        }
+
+    }
+
+    private void printMap(List<State> backtrack) {
+        // create a duplicate map for outputs
+        // look very much like reached setup
+        ArrayList<ArrayList<ArrayList<Character>>> output = new ArrayList<>(numColors + 1);
+
+
+        for (int color = 0; color < numColors + 1; color++) {
+            // make an array list to store rows for this color
+            ArrayList<ArrayList<Character>> rowList = new ArrayList<>(height);
+            for (int row = 0; row < height; row++) {
+                // array list for column values
+                ArrayList<Character> colList = new ArrayList<>(width);
+                for (int col = 0; col < width; col++) {
+                    colList.add(map.get(row).get(col).render(ColorValue.fromIndex(color)));
+                } // col for()
+                rowList.add(colList);
+            } // row for()
+            reached.add(rowList);
+        } // c for()
+
+        // starter map
+        // walk through the solution and update our characters stored along the path
+        for (State curr : backtrack) {
+            if (curr == backtrack.get(0) || curr == backtrack.get(backtrack.size() - 1)) {
+                // skipp if we are in the start state
+                continue;
+            }
+
+            Tile currTile = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
+            if (currTile.getSymbol() == '.') {
+                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
+            } else if ((currTile.getSymbol() >= 'a' && currTile.getSymbol() <= 'z') || currTile.getSymbol() == '^') {
+                // touched a button
+                char tmp = getBacktrack(curr);
+
+                if (tmp >= 'a' && tmp <= 'z')
+                    // starting from a button
+                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '@');
+                else
+                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '%');
+            } else if ((currTile.getSymbol() >= 'A' && currTile.getSymbol() <= 'Z')) {
+
+                if (currTile.getSymbol() == curr.getColorValue().asDoor())
+                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
+
+            }
+
+        }
+
+        // print out map
+        // FIXME runtime performance
+        for (int co = 0; co <= numColors; co++) {
+            ColorValue curr = ColorValue.fromIndex(co);
+            System.out.print("// color " + curr + "\n");
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    System.out.print(output.get(co).get(row).get(col));
+                }
+                System.out.print("\n");
+            }
+        }
+    }
+
+    /**
+     * backtrack through the reached items to find the start
+     *
+     * @return a list of the states
+     */
+    private List<State> backtrack() {
+        // start from end point
+        State curr = null;
+        ArrayList<State> backtrack = new ArrayList<>();
+
+        for (int color = 0; color <= numColors; color++) {
+            // check backtrack to see if reached
+            char tmp = reached.get(color).get(finish.getPoint().getRow()).get(finish.getPoint().getCol());
+
+            if (tmp != NOT_REACHED) {
+                // this was the color we reached the finish in
+                curr = new State(ColorValue.fromIndex(color), finish.getPoint());
+                // stop looping
+                break;
+            }
+
+        }
+
+        // at this point there should be a value in curr
+        // if no value (null) --> no solution
+        if (curr == null) {
+            return backtrack;
+        }
+
+        // commence backtracking
+        // keep looping while our current state is not the starting point, while backtrack
+        // for current is not '@'
+        backtrack.add(curr);
+
+        while (getBacktrack(curr) != FROM_START) {
+            // get one more state and add to out list
+            char dir = getBacktrack(curr);
+
+            if (dir == GO_NORTH)
+                // backtrack south
+                curr = new State(curr.getColorValue(), curr.getPoint().south());
+            else if (dir == GO_SOUTH)
+                // backtrack north
+                curr = new State(curr.getColorValue(), curr.getPoint().north());
+            else if (dir == GO_EAST)
+                // backtrack west
+                curr = new State(curr.getColorValue(), curr.getPoint().west());
+            else if (dir == GO_WEST)
+                // backtrack east
+                curr = new State(curr.getColorValue(), curr.getPoint().east());
+            else if (dir >= 'a' && dir <= 'z' || dir == '^')
+                // pressed a button
+                curr = new State(new ColorValue(dir), curr.getPoint());
+            else
+                // catch all
+                throw new IllegalStateException("Reached a backtrack location with no place to go: " + curr);
+
+            backtrack.add(curr);
+
+        }
+        return backtrack;
+    }
+
+
+    private char getBacktrack(State curr) {
+        return reached.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
     }
 
 
@@ -335,7 +435,7 @@ public class Maze {
             return false;
 
         // already reached
-        if (reached.get(colorIdx).get(p.getRow()).get(p.getCol()))
+        if (reached.get(colorIdx).get(p.getRow()).get(p.getCol()) != NOT_REACHED)
             return false;
 
         // check if this particular location is traversable
@@ -348,24 +448,22 @@ public class Maze {
 
         // door of diff color check
         if (curr.getSymbol() >= 'A' && curr.getSymbol() <= 'Z')
-            if (curr.isDoor(st.getColorValue()))
-                return false;
-
-        // check for diff color
+            return !curr.isDoor(st.getColorValue());
 
         return true;
     }
 
 
-    private void markReached(State st) {
-        if (st == null) {
-            System.err.println("State does not exist");
-            System.exit(1);
-        }
-
+    /**
+     * mark that a state was reached and from whence we came
+     *
+     * @param st   the state to visit
+     * @param from the direction or button color
+     */
+    private void markReached(State st, char from) {
         int colorIdx = st.getColorValue().asIndex();
         Point p = st.getPoint();
-        reached.get(colorIdx).get(p.getRow()).set(p.getCol(), true);
+        reached.get(colorIdx).get(p.getRow()).set(p.getCol(), from);
     }
 
     private boolean checkFinish(State curr) {
