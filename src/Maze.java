@@ -267,6 +267,7 @@ public class Maze {
                 }
             }
         }
+
         if (c.isCheckpoint2())
             System.out.print(output);
     }
@@ -303,29 +304,30 @@ public class Maze {
                 // array list for column values
                 ArrayList<Character> colList = new ArrayList<>(width);
                 for (int col = 0; col < width; col++) {
-                    colList.add(map.get(row).get(col).render(ColorValue.fromIndex(color)));
+                    colList.add(map.get(row).get(col).renderFinal(ColorValue.fromIndex(color)));
                 } // col for()
                 rowList.add(colList);
             } // row for()
-            reached.add(rowList);
+            output.add(rowList);
         } // c for()
 
         // starter map
         // walk through the solution and update our characters stored along the path
         for (State curr : backtrack) {
             if (curr == backtrack.get(0) || curr == backtrack.get(backtrack.size() - 1)) {
-                // skipp if we are in the start state
+                // skip if we are in the start state
                 continue;
             }
 
             Tile currTile = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
             if (currTile.getSymbol() == '.') {
                 output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
+            } else if (currTile.getSymbol() == '@' && curr.getColorValue().asIndex() != 0) {
+                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
             } else if ((currTile.getSymbol() >= 'a' && currTile.getSymbol() <= 'z') || currTile.getSymbol() == '^') {
                 // touched a button
                 char tmp = getBacktrack(curr);
-
-                if (tmp >= 'a' && tmp <= 'z')
+                if (tmp >= 'a' && tmp <= 'z' ||  tmp == '^')
                     // starting from a button
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '@');
                 else
@@ -333,21 +335,24 @@ public class Maze {
             } else if ((currTile.getSymbol() >= 'A' && currTile.getSymbol() <= 'Z')) {
 
                 if (currTile.getSymbol() == curr.getColorValue().asDoor())
-                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
+                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
 
+            } else {
+                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
             }
 
         }
 
         // print out map
-        // FIXME runtime performance
-        for (int co = 0; co <= numColors; co++) {
+        for (int co = 0; co < numColors + 1; co++) {
             ColorValue curr = ColorValue.fromIndex(co);
             System.out.print("// color " + curr + "\n");
             for (int row = 0; row < height; row++) {
+                StringBuilder sb = new StringBuilder();
                 for (int col = 0; col < width; col++) {
-                    System.out.print(output.get(co).get(row).get(col));
+                    sb.append(output.get(co).get(row).get(col));
                 }
+                System.out.print(sb);
                 System.out.print("\n");
             }
         }
@@ -379,6 +384,9 @@ public class Maze {
         // at this point there should be a value in curr
         // if no value (null) --> no solution
         if (curr == null) {
+            System.out.println("No solution.");
+            System.out.println("Reachable:");
+
             return backtrack;
         }
 
@@ -420,7 +428,6 @@ public class Maze {
     private char getBacktrack(State curr) {
         return reached.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
     }
-
 
     private boolean canBeReached(State st) {
         if (st == null) {

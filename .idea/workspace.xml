@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p1c2 test">
+    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p1c2 works, start of final">
+      <change afterPath="$PROJECT_DIR$/src/test-4-sl.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test-5-qm.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Maze.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/State.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test-1-qy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test-1-qm.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,9 +64,9 @@
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Project1v2" />
-      <option name="PROGRAM_PARAMETERS" value="-s -o list" />
+      <option name="PROGRAM_PARAMETERS" value="-q -o map" />
       <option name="REDIRECT_INPUT" value="true" />
-      <option name="INPUT_FILE" value="$PROJECT_DIR$/p1-examples/spec-1.txt" />
+      <option name="INPUT_FILE" value="$PROJECT_DIR$/p1-examples/small.txt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -93,7 +94,7 @@
       <workItem from="1676932085688" duration="27721000" />
       <workItem from="1677193381930" duration="36916000" />
       <workItem from="1677548338903" duration="13989000" />
-      <workItem from="1677684320418" duration="13508000" />
+      <workItem from="1677684320418" duration="27654000" />
     </task>
     <task id="LOCAL-00001" summary="first test 2/13/23">
       <created>1676337022305</created>
@@ -116,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677469363828</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="p1c2 works, start of final">
+      <created>1677788834829</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1677788834829</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,7 +145,8 @@
     <MESSAGE value="first test 2/13/23" />
     <MESSAGE value="p1c1 test 2/15/23 (19 passed)" />
     <MESSAGE value="p1c2 test" />
-    <option name="LAST_COMMIT_MESSAGE" value="p1c2 test" />
+    <MESSAGE value="p1c2 works, start of final" />
+    <option name="LAST_COMMIT_MESSAGE" value="p1c2 works, start of final" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -148,9 +157,9 @@
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Main.java</url>
-          <line>18</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$PROJECT_DIR$/src/Maze.java</url>
+          <line>321</line>
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

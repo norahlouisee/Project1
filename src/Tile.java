@@ -40,6 +40,13 @@ public class Tile {
         return symbol;
     }
 
+    public char renderFinal(ColorValue v) {
+        if (symbol == v.asButton() || symbol == v.asDoor() || (symbol == '@' && v.asIndex() != 0))
+            return '.';
+
+        return symbol;
+    }
+
     public boolean isButton(ColorValue v) {
         if ((symbol >= 'a' && symbol <= 'z') || symbol == '^') {
             return symbol != v.asButton();
