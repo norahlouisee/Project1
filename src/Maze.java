@@ -299,7 +299,6 @@ public class Maze {
     }
 
     private void printNoSolution() {
-
         for (int row = 0; row < height; row++) {
             // create a string then print all at once
             StringBuilder sb = new StringBuilder();
@@ -360,9 +359,12 @@ public class Maze {
             } else if ((currTile.getSymbol() >= 'a' && currTile.getSymbol() <= 'z') || currTile.getSymbol() == '^') {
                 // touched a button
                 char tmp = getBacktrack(curr);
-                if ((tmp >= 'a' && tmp <= 'z' || tmp == '^') && tmp != curr.getColorValue().asButton())
+                if ((tmp >= 'a' && tmp <= 'z' || tmp == '^'))
                     // starting from a button
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '@');
+                else if (currTile.getSymbol() == curr.getColorValue().asButton())
+                    output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
+
                 else
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '%');
             } else if ((currTile.getSymbol() >= 'A' && currTile.getSymbol() <= 'Z')) {
@@ -370,9 +372,8 @@ public class Maze {
                 if (currTile.getSymbol() == curr.getColorValue().asDoor())
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
 
-            } else if (currTile.getSymbol() >= '@' && curr.getColorValue().asIndex() != start.getColorValue().asIndex()) {
+            } else if (currTile.getSymbol() == '@' && curr.getColorValue().asIndex() != start.getColorValue().asIndex()) {
                 output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
-
             }
 
         }

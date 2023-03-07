@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p2 final (20/39 passed)">
+    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p2 final (28/39 passed)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Maze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test-1-qm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test-1-qm.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +62,7 @@
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Project1v2" />
-      <option name="PROGRAM_PARAMETERS" value="-q -o map" />
+      <option name="PROGRAM_PARAMETERS" value="-s -y" />
       <option name="REDIRECT_INPUT" value="true" />
       <option name="INPUT_FILE" value="$PROJECT_DIR$/p1-examples/spec-1.txt" />
       <method v="2">
@@ -92,7 +93,7 @@
       <workItem from="1677193381930" duration="36916000" />
       <workItem from="1677548338903" duration="13989000" />
       <workItem from="1677684320418" duration="27914000" />
-      <workItem from="1678130706537" duration="8124000" />
+      <workItem from="1678130706537" duration="15024000" />
     </task>
     <task id="LOCAL-00001" summary="first test 2/13/23">
       <created>1676337022305</created>
@@ -129,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678124526367</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="p2 final (28/39 passed)">
+      <created>1678149401606</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678149401606</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +160,8 @@
     <MESSAGE value="p1c2 test" />
     <MESSAGE value="p1c2 works, start of final" />
     <MESSAGE value="p2 final (20/39 passed)" />
-    <option name="LAST_COMMIT_MESSAGE" value="p2 final (20/39 passed)" />
+    <MESSAGE value="p2 final (28/39 passed)" />
+    <option name="LAST_COMMIT_MESSAGE" value="p2 final (28/39 passed)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -161,11 +170,6 @@
           <url>file://$PROJECT_DIR$/src/Point.java</url>
           <line>23</line>
           <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Maze.java</url>
-          <line>431</line>
-          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
