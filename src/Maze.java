@@ -263,8 +263,7 @@ public class Maze {
 
                 if (checkFinish(north) || checkFinish(east) || checkFinish(south) || checkFinish(west)) {
                     solution = true;
-                    if (c.isCheckpoint2())
-                        break;
+                    break;
                 }
             }
         }
@@ -290,9 +289,9 @@ public class Maze {
         }
         else {
             // print the list
-            for (State s : backtrack) {
-                list.insert(0, s.printState());
-            }
+            for (int i = backtrack.size() - 1; i >= 0; i--)
+                list.append(backtrack.get(i).printState());
+
             System.out.print(list);
         }
 
@@ -345,6 +344,12 @@ public class Maze {
             output.add(rowList);
         } // c for()
 
+        /*
+        for (int i = 1; i < numColors + 1; i++) {
+            output.get(i).get(start.getPoint().getRow()).set(start.getPoint().getCol(), '.');
+        }
+         */
+
         // starter map
         // walk through the solution and update our characters stored along the path
         for (State curr : backtrack) {
@@ -364,7 +369,6 @@ public class Maze {
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '@');
                 else if (currTile.getSymbol() == curr.getColorValue().asButton())
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
-
                 else
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '%');
             } else if ((currTile.getSymbol() >= 'A' && currTile.getSymbol() <= 'Z')) {
@@ -375,7 +379,6 @@ public class Maze {
             } else if (currTile.getSymbol() == '@' && curr.getColorValue().asIndex() != start.getColorValue().asIndex()) {
                 output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
             }
-
         }
 
         StringBuilder sb = new StringBuilder();
