@@ -28,13 +28,13 @@ public class Maze {
     private StringBuilder output;
 
     private static final char FROM_START = '@';
-    private static final char FINISH = '?';
     private static final char NOT_REACHED = '#';
     private static final char GO_NORTH = 'N';
     private static final char GO_EAST = 'E';
     private static final char GO_SOUTH = 'S';
     private static final char GO_WEST = 'W';
 
+    private static boolean solution = false;
 
     public Maze(Scanner in) {
         // get info from scanner
@@ -262,6 +262,7 @@ public class Maze {
                 }
 
                 if (checkFinish(north) || checkFinish(east) || checkFinish(south) || checkFinish(west)) {
+                    solution = true;
                     if (c.isCheckpoint2())
                         break;
                 }
@@ -277,8 +278,14 @@ public class Maze {
 
         StringBuilder list = new StringBuilder();
 
+        if (!solution) {
+            System.out.println("No solution.");
+            System.out.println("Reachable:");
+
+            printNoSolution();
+        }
         // output with the correct version
-        if (c.isMapOutputMode()) {
+        else if (c.isMapOutputMode()) {
             printMap(backtrack);
         }
         else {
@@ -290,6 +297,34 @@ public class Maze {
         }
 
     }
+
+    private void printNoSolution() {
+
+        for (int row = 0; row < height; row++) {
+            // create a string then print all at once
+            StringBuilder sb = new StringBuilder();
+
+            for (int col = 0; col < width; col++) {
+                if (wasReached(row, col))
+                    sb.append(map.get(row).get(col));
+                else
+                    sb.append("#");
+            }
+
+            System.out.print(sb);
+            // row is output
+            System.out.print("\n");
+        }
+    }
+
+    private boolean wasReached(int row, int col) {
+        for (int color = 0; color <= numColors; color++) {
+            if (!reached.get(color).get(row).get(col).equals('#'))
+                return true;
+        }
+        return false;
+    }
+
 
     private void printMap(List<State> backtrack) {
         // create a duplicate map for outputs
@@ -322,12 +357,10 @@ public class Maze {
             Tile currTile = map.get(curr.getPoint().getRow()).get(curr.getPoint().getCol());
             if (currTile.getSymbol() == '.') {
                 output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
-            } else if (currTile.getSymbol() == '@' && curr.getColorValue().asIndex() != 0) {
-                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
             } else if ((currTile.getSymbol() >= 'a' && currTile.getSymbol() <= 'z') || currTile.getSymbol() == '^') {
                 // touched a button
                 char tmp = getBacktrack(curr);
-                if (tmp >= 'a' && tmp <= 'z' ||  tmp == '^')
+                if ((tmp >= 'a' && tmp <= 'z' || tmp == '^') && tmp != curr.getColorValue().asButton())
                     // starting from a button
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '@');
                 else
@@ -337,25 +370,28 @@ public class Maze {
                 if (currTile.getSymbol() == curr.getColorValue().asDoor())
                     output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
 
-            } else {
-                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '.');
+            } else if (currTile.getSymbol() >= '@' && curr.getColorValue().asIndex() != start.getColorValue().asIndex()) {
+                output.get(curr.getColorValue().asIndex()).get(curr.getPoint().getRow()).set(curr.getPoint().getCol(), '+');
+
             }
 
         }
 
+        StringBuilder sb = new StringBuilder();
         // print out map
         for (int co = 0; co < numColors + 1; co++) {
             ColorValue curr = ColorValue.fromIndex(co);
-            System.out.print("// color " + curr + "\n");
+            sb.append("// color ");
+            sb.append(curr);
+            sb.append("\n");
             for (int row = 0; row < height; row++) {
-                StringBuilder sb = new StringBuilder();
                 for (int col = 0; col < width; col++) {
                     sb.append(output.get(co).get(row).get(col));
                 }
-                System.out.print(sb);
-                System.out.print("\n");
+                sb.append("\n");
             }
         }
+        System.out.print(sb);
     }
 
     /**
@@ -384,9 +420,7 @@ public class Maze {
         // at this point there should be a value in curr
         // if no value (null) --> no solution
         if (curr == null) {
-            System.out.println("No solution.");
-            System.out.println("Reachable:");
-
+            solution = false;
             return backtrack;
         }
 

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p1c2 works, start of final">
-      <change afterPath="$PROJECT_DIR$/src/test-4-sl.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test-5-qm.txt" afterDir="false" />
+    <list default="true" id="ba731bfd-cb2e-485b-ae57-ef9a8c8bf7cc" name="Changes" comment="p2 final (20/39 passed)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Maze.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test-1-qy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test-1-qm.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,15 +39,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "editor.preferences.tabs"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -66,7 +63,7 @@
       <module name="Project1v2" />
       <option name="PROGRAM_PARAMETERS" value="-q -o map" />
       <option name="REDIRECT_INPUT" value="true" />
-      <option name="INPUT_FILE" value="$PROJECT_DIR$/p1-examples/small.txt" />
+      <option name="INPUT_FILE" value="$PROJECT_DIR$/p1-examples/spec-1.txt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -94,7 +91,8 @@
       <workItem from="1676932085688" duration="27721000" />
       <workItem from="1677193381930" duration="36916000" />
       <workItem from="1677548338903" duration="13989000" />
-      <workItem from="1677684320418" duration="27654000" />
+      <workItem from="1677684320418" duration="27914000" />
+      <workItem from="1678130706537" duration="8124000" />
     </task>
     <task id="LOCAL-00001" summary="first test 2/13/23">
       <created>1676337022305</created>
@@ -124,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677788834829</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="p2 final (20/39 passed)">
+      <created>1678124526367</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1678124526367</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,7 +151,8 @@
     <MESSAGE value="p1c1 test 2/15/23 (19 passed)" />
     <MESSAGE value="p1c2 test" />
     <MESSAGE value="p1c2 works, start of final" />
-    <option name="LAST_COMMIT_MESSAGE" value="p1c2 works, start of final" />
+    <MESSAGE value="p2 final (20/39 passed)" />
+    <option name="LAST_COMMIT_MESSAGE" value="p2 final (20/39 passed)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -158,8 +164,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Maze.java</url>
-          <line>321</line>
-          <option name="timeStamp" value="25" />
+          <line>431</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
